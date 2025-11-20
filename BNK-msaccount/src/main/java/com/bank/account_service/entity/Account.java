@@ -13,7 +13,7 @@ public class Account {
 
     private Long clientId; // ID referenciado al cliente
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, name = "account_number")
     private String accountNumber;
 
     private String accountType = "ahorro";

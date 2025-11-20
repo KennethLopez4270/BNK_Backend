@@ -1,4 +1,5 @@
 package com.bank.account_service.controller;
+
 import com.bank.account_service.dto.AccountDTO;
 import com.bank.account_service.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,19 @@ public class AccountController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
-        accountService.deleteAccount(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteAccount(@PathVariable String id) {
+        try {
+            accountService.deleteAccount(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            // Cuenta no encontrada u otro error
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            // Error interno del servidor
+            return ResponseEntity.internalServerError().build();
+        }
     }
+
     @PatchMapping("/{id}/deposit")
     public ResponseEntity<AccountDTO> deposit(@PathVariable Long id, @RequestParam BigDecimal amount) {
         AccountDTO updated = accountService.deposit(id, amount);
