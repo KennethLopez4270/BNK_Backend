@@ -5,7 +5,7 @@ echo =======================================
 echo.
 
 :: Cambia esta ruta por la ruta donde están tus carpetas
-cd /d "C:\ruta\a\tus\microservicios"
+cd /d "C:\Users\KENNETH\Documents\GitHub\BNK_Backend"
 
 :: Abrir cada proyecto en una nueva ventana de consola
 start cmd /k "cd BNK-msaccount && mvn spring-boot:run"

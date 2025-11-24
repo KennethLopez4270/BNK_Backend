@@ -39,8 +39,10 @@ public class AccountService {
         }).orElse(null);
     }
 
-    public void deleteAccount(Long id) {
-        accountRepository.deleteById(id);
+    public void deleteAccount(String accountNumber) {
+        // Validar que la cuenta existe antes de eliminar
+        // Eliminar la cuenta
+        accountRepository.deleteByAccountNumber(accountNumber);
     }
 
     private AccountDTO mapToDTO(Account account) {
