@@ -6,7 +6,7 @@ spring:
     name: payment-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5450/banco_db
+    url: jdbc:postgresql://localhost:5450/studentgest
     username: postgres
     password: ABCabc123
     driver-class-name: org.postgresql.Driver

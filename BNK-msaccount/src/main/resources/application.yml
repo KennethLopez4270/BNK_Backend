@@ -6,9 +6,9 @@ spring:
     name: account-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/banco_db
+    url: jdbc:postgresql://localhost:5450/studentgest
     username: postgres
-    password: admin
+    password: ABCabc123
     driver-class-name: org.postgresql.Driver
 
   jpa:
