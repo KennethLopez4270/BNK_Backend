@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * Tests para AccountController
  * Usa @WebMvcTest para probar solo la capa web (Controller)
  */
+
 @WebMvcTest(AccountController.class)
 class AccountControllerTest {
 
@@ -39,11 +41,13 @@ class AccountControllerTest {
 
     @MockBean
     private AccountService accountService;
-    
 
+    // TESTS PARA GET (Obtener Cuentas) 
+    
+    // 1. Prueba Unitaria 1: Obtener todas las cuentas existentes
     @Test
     void getAllAccounts_DeberiaRetornarListaDeCuentas() throws Exception {
-        // ========== PREPARACIÓN (Arrange) ==========
+        // Preparacion datos de prueba (Arrange)
         AccountDTO cuenta1 = new AccountDTO();
         cuenta1.setId(1L);
         cuenta1.setClientId(100L);
@@ -65,7 +69,7 @@ class AccountControllerTest {
         // Configuramos el SERVICIO (no el controller) para retornar datos de prueba
         when(accountService.getAllAccounts()).thenReturn(cuentasEsperadas);
 
-        // ========== EJECUCIÓN (Act) + VERIFICACIÓN (Assert) ==========
+        // Ejecucion de Prueba (Act) y verificacion de Prueba (Assert) 
         mockMvc.perform(get("/api/accounts")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -79,6 +83,8 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$[1].balance", is(2500.0)));
     }
 
+    //2. Prueba Unitaria 2: Lista vacia cuando no hay cuentas
+
     @Test
     void getAllAccounts_CuandoNoHayCuentas_DeberiaRetornarListaVacia() throws Exception {
         // ========== PREPARACIÓN (Arrange) ==========
@@ -91,6 +97,8 @@ class AccountControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(0)));
     }
+
+    //3. Prueba Unitaria 3: Obtener cuenta por ID existente
 
     @Test
     void getAccountById_CuandoExiste_DeberiaRetornarCuenta() throws Exception {
@@ -227,7 +235,7 @@ class AccountControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // ==================== TESTS PARA DELETE (Eliminar Cuenta) ====================
+    // TESTS PARA DELETE (Eliminar Cuenta)
     
     @Test
     void deleteAccount_CuandoExiste_DeberiaEliminarCuenta() throws Exception {
@@ -240,19 +248,19 @@ class AccountControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    // @Test
-    // void deleteAccount_CuandoNoExiste_DeberiaRetornar404() throws Exception {
-    //     // ========== PREPARACIÓN (Arrange) ==========
-    //     // Configuramos el servicio para lanzar RuntimeException cuando no encuentra la cuenta
-    //     when(accountService.deleteAccount("999")).thenThrow(new RuntimeException("Cuenta no encontrada"));
+    @Test
+    void deleteAccount_CuandoNoExiste_DeberiaRetornar404() throws Exception {
+        // ========== PREPARACIÓN (Arrange) ==========
+        // Configuramos el servicio para lanzar RuntimeException cuando no encuentra la cuenta
+        when(accountService.deleteAccount("999")).thenThrow(new RuntimeException("Cuenta no encontrada"));
 
-    //     // ========== EJECUCIÓN + VERIFICACIÓN ==========
-    //     mockMvc.perform(delete("/api/accounts/999")
-    //                     .contentType(MediaType.APPLICATION_JSON))
-    //             .andExpect(status().isNotFound());
-    // }
+        // ========== EJECUCIÓN + VERIFICACIÓN ==========
+        mockMvc.perform(delete("/api/accounts/999")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 
-    // ==================== TESTS PARA PATCH /deposit (Depósito) ====================
+    // TESTS PARA PATCH /deposit (Depósito)
     
     @Test
     void deposit_ConMontoValido_DeberiaAumentarBalance() throws Exception {
@@ -267,7 +275,7 @@ class AccountControllerTest {
 
         when(accountService.deposit(eq(1L), eq(BigDecimal.valueOf(500.00)))).thenReturn(cuentaActualizada);
 
-        // ========== EJECUCIÓN + VERIFICACIÓN ==========
+        //  EJECUCIÓN + VERIFICACIÓN
         mockMvc.perform(patch("/api/accounts/1/deposit")
                         .param("amount", "500.00")
                         .contentType(MediaType.APPLICATION_JSON))

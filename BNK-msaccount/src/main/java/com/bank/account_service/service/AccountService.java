@@ -39,10 +39,22 @@ public class AccountService {
         }).orElse(null);
     }
 
-    public void deleteAccount(String accountNumber) {
+    public boolean deleteAccount(String accountNumber) {
         // Validar que la cuenta existe antes de eliminar
         // Eliminar la cuenta
-        accountRepository.deleteByAccountNumber(accountNumber);
+        try {
+            String account = accountNumber;
+            accountRepository.deleteByAccountNumber(accountNumber);
+            if (account == null) {
+                throw new RuntimeException("Cuenta no encontrada.");
+            }
+            return true;
+        } catch (Exception e) {
+            
+            throw new RuntimeException("Error al eliminar la cuenta: " + e.getMessage());
+            
+        }
+        //accountRepository.deleteByAccountNumber(accountNumber);
     }
 
     private AccountDTO mapToDTO(Account account) {
