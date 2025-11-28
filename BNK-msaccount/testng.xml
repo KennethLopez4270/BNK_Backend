@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="ATDD Suite - Sistema Bancario">
+    <test name="Pruebas End-to-End">
+        <classes>
+            <class name="com.bank.account_service.atdd.AccesoGestionCuentasATDDTest"/>
+        </classes>
+    </test>
+</suite>
